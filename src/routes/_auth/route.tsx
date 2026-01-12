@@ -14,10 +14,10 @@ function RouteComponent() {
   return (
     <>
       <div className="w-screen h-screen flex items-center justify-center">
-        <Card>
+        <Card className="w-xl shadow-2xl">
         <CardHeader>
-          <CardTitle className="text-center">
-            Next<span className="primary">Buy</span>
+          <CardTitle className="flex items-center justify-center gap-2">
+            <h1 className="text-3xl">Next<span className="text-amber-700">Buy</span></h1>
           </CardTitle>
         </CardHeader>
         <CardContent>
