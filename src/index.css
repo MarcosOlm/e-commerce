@@ -113,6 +113,23 @@
   --sidebar-ring: oklch(0.552 0.016 285.938);
 }
 
+@keyframes slide-up-fade {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@layer utilities {
+  .animate-slide-up {
+    animation: slide-up-fade 0.8s ease-out forwards;
+  }
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
