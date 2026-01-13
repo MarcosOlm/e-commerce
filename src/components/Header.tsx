@@ -20,51 +20,69 @@ import {
 import { Item, ItemActions, ItemContent } from "./ui/item";
 
 function Header() {
+  const buy = Array(5).fill(null);
+
   return (
     <>
       <header className="w-screen py-4 px-15 flex items-center justify-between">
         <h1 className="text-2xl">
           Next<span className="text-amber-700">Buy</span>
         </h1>
-        <nav className="flex items-center justify-between gap-5">
+        <nav className="flex items-center justify-between gap-2">
           <Link to="/">
-            <Search size={22} />
+            <Search size={20} className="w-8 h-8 p-1.5 transition-colors duration-100 hover:bg-amber-600 hover:text-amber-50 rounded" />
           </Link>
 
           {/* shop-cart */}
           <DropdownMenu>
             <DropdownMenuTrigger>
-              <ShoppingBag size={22} className="cursor-pointer" />
+              <ShoppingBag size={20} className="w-8 h-8 p-1.5 transition-colors duration-100 hover:bg-amber-600 hover:text-amber-50 rounded cursor-pointer" />
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-96 p-2">
+            <DropdownMenuContent className="max-w-96 p-2">
               <DropdownMenuLabel className="flex items-center justify-start gap-1">
                 <ShoppingBag size={20} />
                 <p>Carrinho (1)</p>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
+              <div
+                className={
+                  buy.length < 4
+                    ? "max-h-96 overflow-hidden"
+                    : "max-h-96 overflow-y-scroll overflow-x-hidden"
+                }
+              >
+                {buy.map((_, index) => (
+                  <DropdownMenuItem key={index}>
+                    <div className="grid grid-cols-[1fr_minmax(0,2fr)_40px] grid-rows-[2fr_minmax(0,1fr)_1fr] gap-x-4 max-h-20">
+                      <img
+                        src="/shoe-photo.jpeg"
+                        alt="sapato"
+                        className="rounded col-span-1 row-span-3 size-full object-cover object-center"
+                      />
+                      <h1 className="w-full col-start-2 col-end-3 my-auto">
+                        Tênis Urban Runner
+                      </h1>
+                      <p className="col-start-2 col-end-3 mt-auto">R$ 299,90</p>
+                      <div className="col-start-2 col-end-3 mt-auto">
+                        <Button className="w-5 h-5 p-0">-</Button>
+                        <span className="mx-2">1</span>
+                        <Button className="w-5 h-5 p-0">+</Button>
+                      </div>
+                      <Button className="col-start-3 col-end-4 bg-transparent hover:bg-destructive">
+                        <Trash />
+                      </Button>
+                    </div>
+                  </DropdownMenuItem>
+                ))}
+              </div>
+              <DropdownMenuSeparator />
               <DropdownMenuItem>
-                <div className="grid grid-cols-[2fr_minmax(0,3fr)_1fr] grid-rows-3 gap-x-4">
-                  <img
-                    src="/shoe-photo.jpeg"
-                    alt="sapato"
-                    className="rounded col-span-1 row-span-3 h-24"
-                  />
-                  <h1 className="w-full col-start-2 col-end-3">
-                    Tênis Urban Runner
-                  </h1>
-                  <p className="col-start-2 col-end-3">R$ 299,90</p>
-                  <div className="col-start-2 col-end-3">
-                    <Button className="w-5 h-5 p-0">-</Button>
-                    <span className="mx-2">1</span>
-                    <Button className="w-5 h-5 p-0">+</Button>
-                  </div>
-                  <Button className="col-start-3 col-end-4 ml-auto bg-transparent hover:bg-destructive">
-                    <Trash />
-                  </Button>
+                <div className="w-full px-3 flex items-center justify-between">
+                  <h1>Total</h1>
+                  <p>R$ 299,90</p>
                 </div>
               </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem className="">
+              <DropdownMenuItem>
                 <Button className="w-full">Comprar</Button>
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -73,7 +91,7 @@ function Header() {
           {/* menu */}
           <Sheet>
             <SheetTrigger>
-              <Menu size={22} className="cursor-pointer" />
+              <Menu size={20} className="w-8 h-8 p-1.5 transition-colors duration-100 hover:bg-amber-600 hover:text-amber-50 rounded cursor-pointer" />
             </SheetTrigger>
             <SheetContent>
               <SheetHeader>
