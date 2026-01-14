@@ -31,7 +31,7 @@ function Hero() {
         setApi={setApi}
         plugins={[Autoplay({ delay: 5000 })]}
         opts={{ loop: true }}
-        className="w-full relative"
+        className="w-full relative mb-16"
       >
         <CarouselContent>
           {img.map((_, index) => (
