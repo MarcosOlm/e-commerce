@@ -23,20 +23,19 @@ function Header() {
   const buy = Array(5).fill(null);
 
   return (
-    <>
-      <header className="w-screen py-4 px-15 flex items-center justify-between">
+      <header className="fixed w-full py-4 px-15 flex items-center justify-between z-50 bg-background">
         <h1 className="text-2xl">
-          Next<span className="text-amber-700">Buy</span>
+          Next<span className="text-primary">Buy</span>
         </h1>
         <nav className="flex items-center justify-between gap-2">
           <Link to="/">
-            <Search size={20} className="w-8 h-8 p-1.5 transition-colors duration-100 hover:bg-amber-600 hover:text-amber-50 rounded" />
+            <Search size={20} className="w-8 h-8 p-1.5 transition-colors duration-100 hover:bg-primary hover:text-primary-foreground rounded" />
           </Link>
 
           {/* shop-cart */}
           <DropdownMenu>
             <DropdownMenuTrigger>
-              <ShoppingBag size={20} className="w-8 h-8 p-1.5 transition-colors duration-100 hover:bg-amber-600 hover:text-amber-50 rounded cursor-pointer" />
+              <ShoppingBag size={20} className="w-8 h-8 p-1.5 transition-colors duration-100 hover:bg-primary hover:text-primary-foreground rounded cursor-pointer" />
             </DropdownMenuTrigger>
             <DropdownMenuContent className="max-w-96 p-2">
               <DropdownMenuLabel className="flex items-center justify-start gap-1">
@@ -82,7 +81,7 @@ function Header() {
                   <p>R$ 299,90</p>
                 </div>
               </DropdownMenuItem>
-              <DropdownMenuItem>
+              <DropdownMenuItem >
                 <Button className="w-full">Comprar</Button>
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -91,7 +90,7 @@ function Header() {
           {/* menu */}
           <Sheet>
             <SheetTrigger>
-              <Menu size={20} className="w-8 h-8 p-1.5 transition-colors duration-100 hover:bg-amber-600 hover:text-amber-50 rounded cursor-pointer" />
+              <Menu size={20} className="w-8 h-8 p-1.5 transition-colors duration-100 hover:bg-primary hover:text-primary-foreground rounded cursor-pointer" />
             </SheetTrigger>
             <SheetContent>
               <SheetHeader>
@@ -126,7 +125,6 @@ function Header() {
           </Sheet>
         </nav>
       </header>
-    </>
   );
 }
 
