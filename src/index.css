@@ -75,7 +75,7 @@
   --accent-foreground: oklch(0.8823 0.0571 254.1284);
   --destructive: oklch(0.6368 0.2078 25.3313);
   --destructive-foreground: oklch(1.0000 0 0);
-  --border: oklch(0.3843 0.0301 269.7337);
+  --border: oklch(28.536% 0.01928 268.018);
   --input: oklch(0.3843 0.0301 269.7337);
   --ring: oklch(0.6397 0.1720 36.4421);
   --chart-1: oklch(0.7156 0.0605 248.6845);
@@ -175,9 +175,21 @@
   }
 }
 
+@keyframes grow-left {
+  from {
+    width: 81px;
+  }
+  to {
+    width: 100%;
+  }
+}
+
 @layer utilities {
   .animate-slide-up {
     animation: slide-up-fade 0.8s ease-out forwards;
+  }
+  .animate-grow-left {
+    animation: grow-left 0.3s linear forwards;
   }
 }
 
