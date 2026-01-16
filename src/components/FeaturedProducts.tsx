@@ -14,7 +14,7 @@ function FeaturedProducts() {
   const prod = Array(6).fill(null);
 
   return (
-    <section className="w-full px-16 mb-16 flex flex-col gap-7">
+    <section className="w-full mb-16 flex flex-col gap-7">
       <div>
         <h1 className="text-3xl leading-none font-semibold">Destaques</h1>
         <p className="text-muted-foreground text-sm">
@@ -24,7 +24,7 @@ function FeaturedProducts() {
       <div className="w-full grid grid-cols-4 gap-6">
         {prod.map((_, index) => (
           <Card className="relative pt-0 overflow-hidden" key={index}>
-            <Link to="/">
+            <Link to="/products/$id" params={{id: String(index)}}>
               <CardAction className="absolute top-3 right-4 z-10">
                 <ExternalLink color="white" />
               </CardAction>

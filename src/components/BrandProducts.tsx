@@ -21,7 +21,7 @@ function BrandProducts() {
   const prod = Array(10).fill(null);
 
   return (
-    <section className="w-full px-16 mb-16 flex flex-col gap-7">
+    <section className="w-full mb-16 flex flex-col gap-7">
       <div>
         <h1 className="text-3xl leading-none font-semibold">Marcas</h1>
         <p className="text-muted-foreground text-sm">
@@ -33,12 +33,12 @@ function BrandProducts() {
           {prod.map((_, index) => (
             <CarouselItem className="basis-1/5" key={index}>
               <Card className="relative pt-0 overflow-hidden">
-                <Link to="/">
+                <Link to="/products/$id" params={{id: String(index)}} >
                   <CardAction className="absolute top-3 right-4 z-10">
                     <ExternalLink color="white" size={20} />
                   </CardAction>
                   <img
-                    src="shoe-photo.jpeg"
+                    src="/shoe-photo.jpeg"
                     alt="foto tênis"
                     className="rounded-t-xl transition-transform duration-100 hover:scale-102"
                   />

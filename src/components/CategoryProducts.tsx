@@ -5,7 +5,7 @@ function CategoryProducts() {
   const category = Array(4).fill(null);
 
   return (
-    <section className="w-full px-16 mb-16 flex flex-col gap-7">
+    <section className="w-full mb-16 flex flex-col gap-7">
       <div>
         <h1 className="text-3xl leading-none font-semibold">Categorias</h1>
         <p className="text-muted-foreground text-sm">Explore por categoria</p>
