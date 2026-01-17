@@ -9,12 +9,24 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SearchRouteImport } from './routes/search'
+import { Route as PurchaseRouteImport } from './routes/purchase'
 import { Route as AuthRouteRouteImport } from './routes/_auth/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProductsIdRouteImport } from './routes/products.$id'
 import { Route as AuthSingUpRouteImport } from './routes/_auth/sing-up'
 import { Route as AuthSingInRouteImport } from './routes/_auth/sing-in'
 
+const SearchRoute = SearchRouteImport.update({
+  id: '/search',
+  path: '/search',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PurchaseRoute = PurchaseRouteImport.update({
+  id: '/purchase',
+  path: '/purchase',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthRouteRoute = AuthRouteRouteImport.update({
   id: '/_auth',
   getParentRoute: () => rootRouteImport,
@@ -42,12 +54,16 @@ const AuthSingInRoute = AuthSingInRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/purchase': typeof PurchaseRoute
+  '/search': typeof SearchRoute
   '/sing-in': typeof AuthSingInRoute
   '/sing-up': typeof AuthSingUpRoute
   '/products/$id': typeof ProductsIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/purchase': typeof PurchaseRoute
+  '/search': typeof SearchRoute
   '/sing-in': typeof AuthSingInRoute
   '/sing-up': typeof AuthSingUpRoute
   '/products/$id': typeof ProductsIdRoute
@@ -56,19 +72,29 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_auth': typeof AuthRouteRouteWithChildren
+  '/purchase': typeof PurchaseRoute
+  '/search': typeof SearchRoute
   '/_auth/sing-in': typeof AuthSingInRoute
   '/_auth/sing-up': typeof AuthSingUpRoute
   '/products/$id': typeof ProductsIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/sing-in' | '/sing-up' | '/products/$id'
+  fullPaths:
+    | '/'
+    | '/purchase'
+    | '/search'
+    | '/sing-in'
+    | '/sing-up'
+    | '/products/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/sing-in' | '/sing-up' | '/products/$id'
+  to: '/' | '/purchase' | '/search' | '/sing-in' | '/sing-up' | '/products/$id'
   id:
     | '__root__'
     | '/'
     | '/_auth'
+    | '/purchase'
+    | '/search'
     | '/_auth/sing-in'
     | '/_auth/sing-up'
     | '/products/$id'
@@ -77,11 +103,27 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
+  PurchaseRoute: typeof PurchaseRoute
+  SearchRoute: typeof SearchRoute
   ProductsIdRoute: typeof ProductsIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/search': {
+      id: '/search'
+      path: '/search'
+      fullPath: '/search'
+      preLoaderRoute: typeof SearchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/purchase': {
+      id: '/purchase'
+      path: '/purchase'
+      fullPath: '/purchase'
+      preLoaderRoute: typeof PurchaseRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_auth': {
       id: '/_auth'
       path: ''
@@ -137,6 +179,8 @@ const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRouteRoute: AuthRouteRouteWithChildren,
+  PurchaseRoute: PurchaseRoute,
+  SearchRoute: SearchRoute,
   ProductsIdRoute: ProductsIdRoute,
 }
 export const routeTree = rootRouteImport
