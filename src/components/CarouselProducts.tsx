@@ -17,15 +17,20 @@ import {
 import { ExternalLink, Heart } from "lucide-react";
 import { Button } from "./ui/button";
 
-function CarouselProducts() {
+interface CarouselProductsProps {
+  title?: string,
+  description?: string,
+}
+
+function CarouselProducts({title, description}: CarouselProductsProps) {
   const prod = Array(10).fill(null);
 
   return (
     <section className="w-full mb-16 flex flex-col gap-7">
-      <div>
-        <h1 className="text-3xl leading-none font-semibold">Marcas</h1>
+      <div className="flex flex-col gap-2">
+        <h1 className="text-3xl leading-none font-semibold">{title}</h1>
         <p className="text-muted-foreground text-sm">
-          Seus favoritos de sempre
+          {description}
         </p>
       </div>
       <Carousel>

@@ -1,14 +1,19 @@
 import { Card, CardDescription, CardTitle } from "./ui/card";
 import { Carousel, CarouselContent, CarouselItem } from "./ui/carousel";
 
-function CategoryProducts() {
+interface CategoryProductsProps {
+  title?: string,
+  description?: string,
+}
+
+function CategoryProducts({title, description}: CategoryProductsProps) {
   const category = Array(4).fill(null);
 
   return (
     <section className="w-full mb-16 flex flex-col gap-7">
-      <div>
-        <h1 className="text-3xl leading-none font-semibold">Categorias</h1>
-        <p className="text-muted-foreground text-sm">Explore por categoria</p>
+      <div className="flex flex-col gap-2">
+        <h1 className="text-3xl leading-none font-semibold">{title}</h1>
+        <p className="text-muted-foreground text-sm">{description}</p>
       </div>
       <Carousel>
         <CarouselContent>

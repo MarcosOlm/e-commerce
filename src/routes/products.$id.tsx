@@ -1,4 +1,4 @@
-import BrandProducts from "@/components/BrandProducts";
+import CarouselProducts from "@/components/CarouselProducts";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import { Button } from "@/components/ui/button";
@@ -78,23 +78,23 @@ function RouteComponent() {
                 <Handbag /> Adicionar ao Carrinho
               </Button>
             </CardContent>
-            <div className="flex items-center justify-around">
-              <Item className="bg-secondary px-9">
+            <div className="grid grid-cols-3 px-8 gap-x-2">
+              <Item className="flex items-center justify-center bg-secondary">
                 <Truck className="text-primary" />
                 Frete Grátis
               </Item>
-              <Item className="bg-secondary px-9">
+              <Item className="flex items-center justify-center bg-secondary">
                 <Shield className="text-primary" />
                 Garantia
               </Item>
-              <Item className="bg-secondary px-9">
+              <Item className="flex items-center justify-center bg-secondary">
                 <RotateCcw className="text-primary" />
                 Troca Fácil
               </Item>
             </div>
           </Card>
         </section>
-        <BrandProducts />
+        <CarouselProducts title="Produtos Relacionados" />
       </main>
       <Footer />
     </>

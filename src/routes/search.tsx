@@ -68,7 +68,7 @@ function RouteComponent() {
             <Slider min={1} max={100} step={1} defaultValue={[100]}/>
           </div>
         </section>
-        <GridProducts title={false} />
+        <GridProducts />
       </main>
       <Footer />
     </>

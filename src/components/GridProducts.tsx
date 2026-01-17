@@ -10,17 +10,22 @@ import {
 import { Button } from "./ui/button";
 import { Link } from "@tanstack/react-router";
 
-function GridProducts({title=true}) {
+interface GridProductsProps {
+  title?: string,
+  description?: string,
+}
+
+function GridProducts({title, description}: GridProductsProps) {
   const prod = Array(6).fill(null);
 
   return (
     <section className="w-full mb-16 flex flex-col gap-7">
-      {title && <div>
-        <h1 className="text-3xl leading-none font-semibold">Destaques</h1>
+      <div className="flex flex-col gap-2">
+        <h1 className="text-3xl leading-none font-semibold"> {title} </h1>
         <p className="text-muted-foreground text-sm">
-          Produtos em alta esta semana
+          {description}
         </p>
-      </div>}
+      </div>
       <div className="w-full grid grid-cols-4 gap-6">
         {prod.map((_, index) => (
           <Card className="relative pt-0 overflow-hidden" key={index}>
