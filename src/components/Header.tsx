@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate, useSearch } from "@tanstack/react-router";
 import {
   ChevronRight,
   Menu,
@@ -25,7 +25,7 @@ import {
   SheetTrigger,
 } from "./ui/sheet";
 import { Item, ItemActions, ItemContent } from "./ui/item";
-import { useState } from "react";
+import React, { useState } from "react";
 import {
   InputGroup,
   InputGroupAddon,
@@ -35,12 +35,22 @@ import {
 
 function Header() {
   const [isSearch, setIsSearch] = useState<boolean>(false);
-  const buy = Array(5).fill(null);
+  const navigate = useNavigate();
+  const {query} = useSearch({from: "__root__"});
+
+  const buy = Array(3).fill(null);
+
+  function submitTest(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const form = new FormData(e.currentTarget);
+    const input = form.get("search");
+    navigate({to: "/search", search: {query: String(input)}})
+  }
 
   return (
     <header className="fixed w-full py-4 px-16 flex items-center justify-between z-50 bg-background shadow-2xl">
-      <h1 className="text-2xl">
-        Next<span className="text-primary">Buy</span>
+      <h1 className="text-2xl font-standard-bold">
+        Next<span className="text-primary font-standard-bold">Buy</span>
       </h1>
       <nav className="flex items-center justify-between gap-2">
         {!isSearch ? (
@@ -48,9 +58,9 @@ function Header() {
             <Search size={20} />
           </Button>
         ) : (
-          <form>
+          <form onSubmit={submitTest}>
             <InputGroup className="ml-auto animate-grow-left shadow-lg">
-              <InputGroupInput placeholder="busque..." autoFocus />
+              <InputGroupInput name="search" placeholder="busque..." autoFocus defaultValue={query} />
               <InputGroupAddon>
                 <Search size={20} />
               </InputGroupAddon>
@@ -59,6 +69,7 @@ function Header() {
                   onClick={() => setIsSearch(!isSearch)}
                   variant={"outline"}
                   className="border-none h-full"
+                  type="button"
                 >
                   <X />
                 </InputGroupButton>
@@ -74,10 +85,10 @@ function Header() {
               <ShoppingBag size={20} />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent className="max-w-96 p-2">
+          <DropdownMenuContent className="max-w-96 p-2 mr-6 bg-background">
             <DropdownMenuLabel className="flex items-center justify-start gap-1">
               <ShoppingBag size={20} />
-              <p>Carrinho (1)</p>
+              <p>Carrinho ({buy.length})</p>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <div
@@ -119,7 +130,7 @@ function Header() {
               </div>
             </DropdownMenuItem>
             <DropdownMenuItem className="focus:bg-transparent">
-              <Button className="w-full">Comprar</Button>
+              <Button className="w-full" onClick={() => navigate({to: '/purchase'})}>Comprar</Button>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

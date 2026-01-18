@@ -1,11 +1,12 @@
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { createFileRoute, useRouter } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, useRouter } from "@tanstack/react-router";
 import { ChevronLeft } from "lucide-react";
 import GridProducts from "@/components/GridProducts";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
+
 
 export const Route = createFileRoute("/search")({
   component: RouteComponent,
@@ -13,6 +14,7 @@ export const Route = createFileRoute("/search")({
 
 function RouteComponent() {
   const router = useRouter();
+  const navigate = useNavigate({from: "/search"});
 
   return (
     <>
@@ -32,9 +34,13 @@ function RouteComponent() {
           <h1 className="text-2xl font-semibold">Todos os Produtos</h1>
           <p className="text-muted-foreground">10 produtos encontrados</p>
         </div>
-        <section className="flex items-center justify-between mb-10">
+        <section className="flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <Select >
+            <Select onValueChange={(value) => {
+              navigate({
+                search: (prev) => ({...prev, category: value === 'all' ? undefined : value})
+              })
+            }}>
                 <SelectTrigger className="shadow-lg w-36">
                     <SelectValue placeholder="Categorias"/>
                 </SelectTrigger>
@@ -48,7 +54,11 @@ function RouteComponent() {
                     </SelectGroup>
                 </SelectContent>
             </Select>
-            <Select>
+            <Select onValueChange={(value) => {
+              navigate({
+                search: (prev) => ({...prev, brand: value === 'all' ? undefined : value})
+              })
+            }}>
                 <SelectTrigger className="shadow-lg w-36">
                     <SelectValue placeholder="Marca"/>
                 </SelectTrigger>
