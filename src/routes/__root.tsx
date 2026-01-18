@@ -8,6 +8,7 @@ const searchShema = z.object({
   category: z.string().optional(),
   brand: z.string().optional(),
   price: z.coerce.number().optional(),
+  isSearch: z.boolean().optional(),
 })
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
