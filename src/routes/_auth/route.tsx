@@ -13,7 +13,7 @@ export const Route = createFileRoute("/_auth")({
 function RouteComponent() {
   return (
     <>
-      <div className="w-screen h-screen flex items-center justify-center">
+      <div className="w-screen h-screen flex items-center justify-center bg-background">
         <Card className="w-xl shadow-2xl">
         <CardHeader>
           <CardTitle className="flex items-center justify-center gap-2">
