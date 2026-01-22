@@ -11,7 +11,9 @@ import {
 } from "@/components/ui/card";
 import { Item } from "@/components/ui/item";
 import { Separator } from "@/components/ui/separator";
-import { createFileRoute, useRouter } from "@tanstack/react-router";
+import { useByName, useSearchProduct } from "@/features/products/product.hook";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { createFileRoute, useParams, useRouter } from "@tanstack/react-router";
 import {
   ChevronLeft,
   Handbag,
@@ -21,13 +23,33 @@ import {
   Truck,
 } from "lucide-react";
 
-export const Route = createFileRoute("/products/$id")({
-  beforeLoad: () => window.scrollTo({ top: 0 }),
+export const Route = createFileRoute("/products/$name")({
+  beforeLoad: async ({ context, params }) => {
+    window.scrollTo({ top: 0 });
+    const data = context.queryClient.ensureQueryData(useByName(params.name));
+    context.queryClient.ensureQueryData(
+      useSearchProduct({ category: (await data).category }),
+    );
+    context.queryClient.ensureQueryData(
+      useSearchProduct({ brand: (await data).brand }),
+    );
+  },
   component: RouteComponent,
 });
 
 function RouteComponent() {
   const router = useRouter();
+  const { name } = useParams({ from: "/products/$name" });
+  const { data } = useSuspenseQuery(useByName(name));
+  const { data: category } = useSuspenseQuery(
+    useSearchProduct({ category: data.category }),
+  );
+  const { data: brand } = useSuspenseQuery(
+    useSearchProduct({ brand: data.brand }),
+  );
+  console.log(category);
+  console.log(brand);
+
   return (
     <>
       <Header />
@@ -44,31 +66,43 @@ function RouteComponent() {
         </a>
         <section className="flex mb-16">
           <img
-            src="/shoe-photo.jpeg"
+            src={data.imgPath}
             alt="foto de sapato"
             className="h-[90vh] w-[50%] object-cover object-center rounded-2xl"
           />
           <Card className="w-full p-0 border-none shadow-none bg-background">
             <CardHeader>
-              <CardDescription className="text-2xl">Nike</CardDescription>
-              <CardTitle className="text-3xl">Tênis Urban Runner</CardTitle>
+              <CardDescription className="text-2xl">
+                {" "}
+                {data.brand}{" "}
+              </CardDescription>
+              <CardTitle className="text-3xl">
+                {" "}
+                {data.name
+                  .replaceAll("-", " ")
+                  .split(" ")
+                  .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                  .join(" ")}{" "}
+              </CardTitle>
               <CardDescription className="text-3xl text-primary font-bold">
-                R$ 299,90
+                {data.price.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'})}
               </CardDescription>
             </CardHeader>
             <CardContent className="flex flex-col gap-5">
               <CardDescription className="text-base">
-                Produto de alta qualidade da marca Nike. Design moderno e
-                elegante, perfeito para o seu dia a dia. Material premium que
-                garante durabilidade e conforto.
+                {data.description}
               </CardDescription>
               <Separator className="bg-neutral-300" />
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
                   <span>Quantidade:</span>
-                  <Button size={"icon-sm"} variant={"outline"}>-</Button>
+                  <Button size={"icon-sm"} variant={"outline"}>
+                    -
+                  </Button>
                   <span>1</span>
-                  <Button size={"icon-sm"} variant={"outline"}>+</Button>
+                  <Button size={"icon-sm"} variant={"outline"}>
+                    +
+                  </Button>
                 </div>
                 <Button>
                   <Heart />
@@ -94,7 +128,14 @@ function RouteComponent() {
             </div>
           </Card>
         </section>
-        <CarouselProducts title="Produtos Relacionados" />
+        <CarouselProducts
+          title="Veja Mais da Mesma Categoria"
+          products={category.content}
+        />
+        <CarouselProducts
+          title="Veja Mais da Mesma Marca"
+          products={brand.content}
+        />
       </main>
       <Footer />
     </>

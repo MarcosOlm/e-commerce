@@ -4,15 +4,15 @@ import type { QueryClient } from '@tanstack/react-query'
 import { z } from 'zod'
 
 const searchShema = z.object({
-  query: z.string().optional(),
+  name: z.string().optional(),
   category: z.string().optional(),
   brand: z.string().optional(),
-  price: z.coerce.number().optional(),
-  isSearch: z.boolean().optional(),
+  page: z.coerce.number().optional(),
+  size: z.coerce.number().optional(),
 })
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
-  validateSearch: (search) => z.parse(searchShema, search),
+  validateSearch: (search) => searchShema.parse(search),
   component: RootComponent,
 })
 

@@ -13,7 +13,7 @@ import { Route as SearchRouteImport } from './routes/search'
 import { Route as PurchaseRouteImport } from './routes/purchase'
 import { Route as AuthRouteRouteImport } from './routes/_auth/route'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as ProductsIdRouteImport } from './routes/products.$id'
+import { Route as ProductsNameRouteImport } from './routes/products.$name'
 import { Route as AuthSingUpRouteImport } from './routes/_auth/sing-up'
 import { Route as AuthSingInRouteImport } from './routes/_auth/sing-in'
 
@@ -36,9 +36,9 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ProductsIdRoute = ProductsIdRouteImport.update({
-  id: '/products/$id',
-  path: '/products/$id',
+const ProductsNameRoute = ProductsNameRouteImport.update({
+  id: '/products/$name',
+  path: '/products/$name',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthSingUpRoute = AuthSingUpRouteImport.update({
@@ -58,7 +58,7 @@ export interface FileRoutesByFullPath {
   '/search': typeof SearchRoute
   '/sing-in': typeof AuthSingInRoute
   '/sing-up': typeof AuthSingUpRoute
-  '/products/$id': typeof ProductsIdRoute
+  '/products/$name': typeof ProductsNameRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -66,7 +66,7 @@ export interface FileRoutesByTo {
   '/search': typeof SearchRoute
   '/sing-in': typeof AuthSingInRoute
   '/sing-up': typeof AuthSingUpRoute
-  '/products/$id': typeof ProductsIdRoute
+  '/products/$name': typeof ProductsNameRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -76,7 +76,7 @@ export interface FileRoutesById {
   '/search': typeof SearchRoute
   '/_auth/sing-in': typeof AuthSingInRoute
   '/_auth/sing-up': typeof AuthSingUpRoute
-  '/products/$id': typeof ProductsIdRoute
+  '/products/$name': typeof ProductsNameRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -86,9 +86,15 @@ export interface FileRouteTypes {
     | '/search'
     | '/sing-in'
     | '/sing-up'
-    | '/products/$id'
+    | '/products/$name'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/purchase' | '/search' | '/sing-in' | '/sing-up' | '/products/$id'
+  to:
+    | '/'
+    | '/purchase'
+    | '/search'
+    | '/sing-in'
+    | '/sing-up'
+    | '/products/$name'
   id:
     | '__root__'
     | '/'
@@ -97,7 +103,7 @@ export interface FileRouteTypes {
     | '/search'
     | '/_auth/sing-in'
     | '/_auth/sing-up'
-    | '/products/$id'
+    | '/products/$name'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -105,7 +111,7 @@ export interface RootRouteChildren {
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
   PurchaseRoute: typeof PurchaseRoute
   SearchRoute: typeof SearchRoute
-  ProductsIdRoute: typeof ProductsIdRoute
+  ProductsNameRoute: typeof ProductsNameRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -138,11 +144,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/products/$id': {
-      id: '/products/$id'
-      path: '/products/$id'
-      fullPath: '/products/$id'
-      preLoaderRoute: typeof ProductsIdRouteImport
+    '/products/$name': {
+      id: '/products/$name'
+      path: '/products/$name'
+      fullPath: '/products/$name'
+      preLoaderRoute: typeof ProductsNameRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_auth/sing-up': {
@@ -181,7 +187,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRouteRoute: AuthRouteRouteWithChildren,
   PurchaseRoute: PurchaseRoute,
   SearchRoute: SearchRoute,
-  ProductsIdRoute: ProductsIdRoute,
+  ProductsNameRoute: ProductsNameRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -6,15 +6,23 @@ import { ChevronLeft } from "lucide-react";
 import GridProducts from "@/components/GridProducts";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
+import { useSearchProduct } from "@/features/products/product.hook";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import type { product } from "@/features/products/productTypes";
 
 
 export const Route = createFileRoute("/search")({
+  loader: async ({context, location}) => {
+    context.queryClient.ensureQueryData(useSearchProduct(location.search))
+  },
   component: RouteComponent,
 });
 
 function RouteComponent() {
   const router = useRouter();
   const navigate = useNavigate({from: "/search"});
+  const query = Route.useSearch();
+  const { data } = useSuspenseQuery(useSearchProduct(query));
 
   return (
     <>
@@ -32,7 +40,7 @@ function RouteComponent() {
         </a>
         <div>
           <h1 className="text-2xl font-semibold">Todos os Produtos</h1>
-          <p className="text-muted-foreground">10 produtos encontrados</p>
+          <p className="text-muted-foreground"> {data.totalElements} produtos encontrados</p>
         </div>
         <section className="flex items-center justify-between">
           <div className="flex items-center gap-4">
@@ -75,12 +83,21 @@ function RouteComponent() {
           </div>
           <div className="flex items-center gap-2 w-96">
             <Label className="w-[60%]">Preço: R$0 - R$ 100</Label>
-            <Slider min={1} max={100} step={1} defaultValue={[100]}/>
+            <Slider min={1} max={100} step={1} defaultValue={[100]} onValueChange={(value) => {
+              data.content = priceFilter(data.content, value[0]);
+            }}/>
           </div>
         </section>
-        <GridProducts />
+        <GridProducts products={data.content}/>
       </main>
       <Footer />
     </>
   );
+}
+
+function priceFilter(list: product[], price: number | undefined) {
+  if (!price) {
+    return list
+  }
+  return list.filter((prod) => prod.price > price)
 }
