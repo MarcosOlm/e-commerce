@@ -1,5 +1,5 @@
 import { useNavigate, useSearch } from "@tanstack/react-router";
-import React, { useState } from "react";
+import React from "react";
 import {
   InputGroup,
   InputGroupAddon,
@@ -11,17 +11,18 @@ import SheetMenu from "./SheetMenu";
 import { Button } from "./ui/button";
 import { Search, X } from "lucide-react";
 import { Link } from "@tanstack/react-router";
+import { useIsSearch } from "@/stores/header.store";
 
 function Header() {
-  const { query, isSearch } = useSearch({ from: "__root__" });
-  const [isSearchOpen, setIsSearchOpen] = useState<boolean>(isSearch ?? false);
   const navigate = useNavigate();
+  const { isSearch, toggleSearch } = useIsSearch();
+  const { name } = useSearch({ from: "__root__" });
 
   function submitTest(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const form = new FormData(e.currentTarget);
     const input = form.get("search");
-    navigate({ to: "/search", search: { query: String(input), isSearch: true } });
+    navigate({ to: "/search", search: (prev) => ({...prev, name: String(input), page: 0, size: 12 }) });
   }
 
   return (
@@ -32,8 +33,8 @@ function Header() {
         </h1>
       </Link>
       <nav className="flex items-center justify-between gap-2">
-        {!isSearchOpen ? (
-          <Button variant={"ghost"} onClick={() => setIsSearchOpen(!isSearchOpen)}>
+        {!isSearch ? (
+          <Button variant={"ghost"} onClick={() => toggleSearch()}>
             <Search size={20} />
           </Button>
         ) : (
@@ -43,14 +44,14 @@ function Header() {
                 name="search"
                 placeholder="busque..."
                 autoFocus
-                defaultValue={query}
+                defaultValue={name}
               />
               <InputGroupAddon>
                 <Search size={20} />
               </InputGroupAddon>
               <InputGroupAddon align={"inline-end"}>
                 <InputGroupButton
-                  onClick={() => setIsSearchOpen(!isSearchOpen)}
+                  onClick={() => toggleSearch()}
                   variant={"outline"}
                   className="border-none h-full"
                   type="button"

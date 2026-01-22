@@ -16,41 +16,52 @@ import {
 } from "./ui/carousel";
 import { ExternalLink, Heart } from "lucide-react";
 import { Button } from "./ui/button";
+import type { product } from "@/features/products/productTypes";
 
 interface CarouselProductsProps {
-  title?: string,
-  description?: string,
+  title?: string;
+  description?: string;
+  products: product[];
 }
 
-function CarouselProducts({title, description}: CarouselProductsProps) {
-  const prod = Array(10).fill(null);
-
+function CarouselProducts({
+  title,
+  description,
+  products,
+}: CarouselProductsProps) {
   return (
     <section className="w-full mb-16 flex flex-col gap-7">
       <div className="flex flex-col gap-2">
         <h1 className="text-3xl leading-none font-semibold">{title}</h1>
-        <p className="text-muted-foreground text-sm">
-          {description}
-        </p>
+        <p className="text-muted-foreground text-sm">{description}</p>
       </div>
       <Carousel>
         <CarouselContent>
-          {prod.map((_, index) => (
-            <CarouselItem className="basis-1/5" key={index}>
+          {products.map((prod) => (
+            <CarouselItem className="basis-1/4" key={prod.name}>
               <Card className="relative pt-0 overflow-hidden">
-                <Link to="/products/$id" params={{id: String(index)}} >
+                <Link to="/products/$name" params={{ name: String(prod.name) }}>
                   <CardAction className="absolute top-3 right-4 z-10">
                     <ExternalLink color="white" size={20} />
                   </CardAction>
                   <img
-                    src="/shoe-photo.jpeg"
+                    src={prod.imgPath}
                     alt="foto tênis"
-                    className="rounded-t-xl transition-transform duration-100 hover:scale-102"
+                    className="rounded-t-xl transition-transform duration-100 hover:scale-102 size-64 w-full object-cover object-center"
                   />
                 </Link>
                 <CardHeader>
-                  <CardDescription>NIKE</CardDescription>
-                  <CardTitle>Tênis Urban Runner</CardTitle>
+                  <CardDescription> {prod.brand} </CardDescription>
+                  <CardTitle>
+                    {" "}
+                    {prod.name
+                      .replaceAll("-", " ")
+                      .split(" ")
+                      .map(
+                        (word) => word.charAt(0).toUpperCase() + word.slice(1),
+                      )
+                      .join(" ")}{" "}
+                  </CardTitle>
                   <CardAction>
                     <Button>
                       <Heart />
@@ -59,7 +70,7 @@ function CarouselProducts({title, description}: CarouselProductsProps) {
                 </CardHeader>
                 <CardContent>
                   <h1 className="text-2xl text-amber-600 font-bold">
-                    R$ 299,90
+                    {prod.price.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'})}
                   </h1>
                 </CardContent>
               </Card>
