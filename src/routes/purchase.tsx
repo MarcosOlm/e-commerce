@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/item";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from "@/components/ui/separator";
+import { useShopCart } from "@/stores/shopCart.store";
 import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { ChevronLeft, CreditCard, Landmark, QrCode, Trash } from "lucide-react";
 
@@ -27,7 +28,7 @@ export const Route = createFileRoute("/purchase")({
 });
 
 function RouteComponent() {
-  const buy = Array(2).fill(null);
+  const buy = useShopCart();
   const router = useRouter();
 
   return (
@@ -52,7 +53,9 @@ function RouteComponent() {
             <h1>Resumo do Pedido</h1>
             <div className="flex items-center justify-between">
               <h2 className="text-muted-foreground">subtotal</h2>
-              <p>R$ 2.699,60</p>
+              <p> {buy.productsItems.reduce((acc, next) => {
+                return acc+ next.cartQuantity * next.product.price
+              }, 0).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })} </p>
             </div>
             <div className="flex items-center justify-between">
               <h2 className="text-muted-foreground">Frete</h2>
@@ -61,38 +64,50 @@ function RouteComponent() {
             <Separator />
             <div className="w-full flex items-center justify-between">
               <h1 className="font-bold">Total</h1>
-              <p className="text-primary font-bold">R$ 2.699,60</p>
+              <p className="text-primary font-bold"> {buy.productsItems.reduce((acc, next) => {
+                return acc+ next.cartQuantity * next.product.price
+              }, 0).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })} </p>
             </div>
             <Button>Confirmar Pedido</Button>
           </section>
           <section className="h-fit flex flex-col gap-3 border rounded-sm shadow-lg p-6">
-            <h1>Produtos ({buy.length})</h1>
+            <h1>Produtos ({buy.productsItems.length})</h1>
             <ItemGroup className="flex flex-col gap-4">
-              {buy.map((_, index) => (
-                <Item key={index}>
+              {buy.productsItems.map((cartItem) => (
+                <Item key={cartItem.product.name}>
                   <ItemMedia className="w-32">
                     <img
-                      src="/shoe-photo.jpeg"
+                      src={cartItem.product.imgPath}
                       alt="foto de sapato"
                       className="rounded"
                     />
                   </ItemMedia>
                   <ItemContent>
                     <div className="flex flex-col">
-                      <ItemTitle>NIKE</ItemTitle>
-                      <ItemDescription>Tênis Urban Runner</ItemDescription>
+                      <ItemTitle> {cartItem.product.brand} </ItemTitle>
+                      <ItemDescription> {cartItem.product.name} </ItemDescription>
                       <ItemDescription className="text-primary">
-                        R$ 299,90
+                        {cartItem.product.price.toLocaleString("pt-BR", {style: "currency", currency: "BRL"})}
                       </ItemDescription>
                       <div className="flex">
-                        <Button className="w-5 h-5 p-0">-</Button>
-                        <span className="mx-2">1</span>
-                        <Button className="w-5 h-5 p-0">+</Button>
+                        <Button 
+                        onClick={() => buy.oneLessQuant(cartItem)}
+                        className="w-5 h-5 p-0"
+                        >-</Button>
+                        <span className="mx-2"> {cartItem.cartQuantity} </span>
+                        <Button 
+                        onClick={() => buy.oneMoreQuant(cartItem)}
+                        className="w-5 h-5 p-0"
+                        >+</Button>
                       </div>
                     </div>
                   </ItemContent>
                   <ItemActions className="flex flex-col">
-                    <h2>R$ 599,80</h2>
+                    <h2> {(cartItem.cartQuantity * cartItem.product.price)
+                  .toLocaleString("pt-BR", {
+                    style: "currency",
+                    currency: "BRL",
+                  })} </h2>
                     <Button className="col-start-3 col-end-4 bg-transparent hover:bg-destructive text-muted-foreground hover:text-white">
                       <Trash className="hover:text-white" />
                     </Button>

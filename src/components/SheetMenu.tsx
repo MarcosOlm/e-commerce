@@ -1,10 +1,14 @@
 import { ChevronRight, Menu } from "lucide-react";
 import { Button } from "./ui/button";
 import { Sheet, SheetContent, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "./ui/sheet";
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { Item, ItemActions, ItemContent } from "./ui/item";
+import { useAuth } from "@/stores/auth.store";
 
 function SheetMenu() {
+  const { isUserLogin, setIsUserLogin } = useAuth();
+  const navigate = useNavigate();
+
   return (
     <>
       <Sheet modal={false}>
@@ -40,7 +44,10 @@ function SheetMenu() {
             </Item>
           </Link>
           <SheetFooter>
-            <Button>Entrar</Button>
+            {!isUserLogin ? 
+              <Button onClick={() => navigate({to: '/sing-in'})}>Entrar</Button>
+              : <Button variant={"outline"} onClick={() => setIsUserLogin(false)}>Sair</Button>  
+          }
           </SheetFooter>
         </SheetContent>
       </Sheet>

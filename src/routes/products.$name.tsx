@@ -1,6 +1,7 @@
 import CarouselProducts from "@/components/CarouselProducts";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
+import Skeleton from "@/components/skeletons/Skeleton";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -12,6 +13,9 @@ import {
 import { Item } from "@/components/ui/item";
 import { Separator } from "@/components/ui/separator";
 import { useByName, useSearchProduct } from "@/features/products/product.hook";
+import { useInsertCartItem } from "@/features/shop-cart/shopCart.hook";
+import { useAuth } from "@/stores/auth.store";
+import { useShopCart } from "@/stores/shopCart.store";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, useParams, useRouter } from "@tanstack/react-router";
 import {
@@ -22,6 +26,7 @@ import {
   Shield,
   Truck,
 } from "lucide-react";
+import { useState } from "react";
 
 export const Route = createFileRoute("/products/$name")({
   beforeLoad: async ({ context, params }) => {
@@ -35,10 +40,12 @@ export const Route = createFileRoute("/products/$name")({
     );
   },
   component: RouteComponent,
+  pendingComponent: Skeleton,
 });
 
 function RouteComponent() {
-  const router = useRouter();
+  // data base product
+  const router = useRouter(); 
   const { name } = useParams({ from: "/products/$name" });
   const { data } = useSuspenseQuery(useByName(name));
   const { data: category } = useSuspenseQuery(
@@ -47,8 +54,12 @@ function RouteComponent() {
   const { data: brand } = useSuspenseQuery(
     useSearchProduct({ brand: data.brand }),
   );
-  console.log(category);
-  console.log(brand);
+
+  // shop cart add
+  const [cartQuantity, setCartQuantity] = useState<number>(1);
+  const { addShopCartItem } = useShopCart();
+
+  const {mutate} = useInsertCartItem()
 
   return (
     <>
@@ -85,7 +96,10 @@ function RouteComponent() {
                   .join(" ")}{" "}
               </CardTitle>
               <CardDescription className="text-3xl text-primary font-bold">
-                {data.price.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'})}
+                {data.price.toLocaleString("pt-BR", {
+                  style: "currency",
+                  currency: "BRL",
+                })}
               </CardDescription>
             </CardHeader>
             <CardContent className="flex flex-col gap-5">
@@ -96,11 +110,19 @@ function RouteComponent() {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
                   <span>Quantidade:</span>
-                  <Button size={"icon-sm"} variant={"outline"}>
+                  <Button
+                    onClick={() => setCartQuantity(cartQuantity - 1)}
+                    size={"icon-sm"}
+                    variant={"outline"}
+                  >
                     -
                   </Button>
-                  <span>1</span>
-                  <Button size={"icon-sm"} variant={"outline"}>
+                  <span> {cartQuantity} </span>
+                  <Button
+                    onClick={() => setCartQuantity(cartQuantity + 1)}
+                    size={"icon-sm"}
+                    variant={"outline"}
+                  >
                     +
                   </Button>
                 </div>
@@ -108,7 +130,20 @@ function RouteComponent() {
                   <Heart />
                 </Button>
               </div>
-              <Button>
+              <Button
+                onClick={() => {
+                  if (useAuth.getState().isUserLogin) {
+                    mutate({
+                      name: data.name,
+                      quantity: cartQuantity,
+                    });
+                  }
+                  addShopCartItem({
+                    product: data,
+                    cartQuantity: cartQuantity,
+                  });
+                }}
+              >
                 <Handbag /> Adicionar ao Carrinho
               </Button>
             </CardContent>
