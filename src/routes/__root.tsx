@@ -7,6 +7,7 @@ const searchShema = z.object({
   name: z.string().optional(),
   category: z.string().optional(),
   brand: z.string().optional(),
+  price: z.coerce.number().optional(),
   page: z.coerce.number().optional(),
   size: z.coerce.number().optional(),
 })
