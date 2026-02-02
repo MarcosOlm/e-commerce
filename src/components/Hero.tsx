@@ -10,10 +10,22 @@ import {
 import Autoplay from "embla-carousel-autoplay";
 import { Link } from "@tanstack/react-router";
 
-function Hero() {
+interface HeroData {
+    id: number,
+    name: string;
+    description: string;
+    tag: string;
+    buttonText: string;
+    imgPath: string;
+  }
+
+interface HeroProps {
+  heroData: HeroData[];
+}
+
+function Hero({ heroData }: HeroProps) {
   const [api, setApi] = React.useState<CarouselApi>();
   const [current, setCurrent] = React.useState(0);
-  const img = Array(3).fill(null);
 
   useEffect(() => {
     if (!api) {
@@ -34,10 +46,10 @@ function Hero() {
         className="w-full relative mb-16"
       >
         <CarouselContent>
-          {img.map((_, index) => (
-            <CarouselItem key={index}>
+          {heroData.map((item, index) => (
+            <CarouselItem key={item.id}>
               <img
-                src="hero-3.jpg"
+                src={item.imgPath}
                 alt="foto de sapato"
                 className="w-full size-140 object-cover object-center"
               />
@@ -49,16 +61,15 @@ function Hero() {
                 `}
                 >
                   <p className="text-white bg-primary w-fit px-5 mb-3 rounded-4xl">
-                    Lançamento
+                    {item.tag}
                   </p>
-                  <h2 className="text-white">Edição Limitada</h2>
-                  <h1 className="text-white text-5xl font-bold">Sneakers</h1>
-                  <p className="text-white mb-3">Estilo que faz a diferença</p>
+                  <h1 className="text-white text-5xl font-bold"> {item.name} </h1>
+                  <p className="text-white mb-3"> {item.description} </p>
                   <Link
                     to="/"
                     className="text-white bg-primary px-7 py-3 rounded-2xl"
                   >
-                    Comprar
+                    {item.buttonText}
                   </Link>
                 </div>
               </div>
