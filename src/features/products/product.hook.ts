@@ -1,9 +1,11 @@
 import { queryOptions } from "@tanstack/react-query";
 import type { getProductRequest } from "./productTypes";
 import {
+  getCategoryInfo,
   getProductByName,
   getProducts,
   getProductsBrand,
+  getProductsFeatured,
 } from "./product.services";
 
 export function useSearchProduct({
@@ -26,10 +28,24 @@ export function useSearchProduct({
   });
 }
 
+export function useFeatured() {
+  return queryOptions({
+    queryKey: ["featured"],
+    queryFn: () => getProductsFeatured(),
+  });
+}
+
 export function useBrand() {
   return queryOptions({
     queryKey: ["brand"],
     queryFn: () => getProductsBrand(),
+  });
+}
+
+export function useCategory() {
+  return queryOptions({
+    queryKey: ["category"],
+    queryFn: () => getCategoryInfo(),
   });
 }
 

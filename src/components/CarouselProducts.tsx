@@ -38,7 +38,7 @@ function CarouselProducts({
       <Carousel>
         <CarouselContent>
           {products.map((prod) => (
-            <CarouselItem className="basis-1/4" key={prod.name}>
+            <CarouselItem className="basis-1/1 md:basis-1/2 xl:basis-1/5" key={prod.name}>
               <Card className="relative pt-0 overflow-hidden">
                 <Link to="/products/$name" params={{ name: String(prod.name) }}>
                   <CardAction className="absolute top-3 right-4 z-10">

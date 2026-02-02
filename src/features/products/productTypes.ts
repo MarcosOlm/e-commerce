@@ -8,13 +8,19 @@ export interface product {
     imgPath: string,
 }
 
+export interface category {
+    imgPath: string,
+    category: "roupas" | "calçados" | "acessórios" | "beleza";
+    total_products: number,
+}
+
 export interface getProductResponse {
     content: product[],
-    first?: boolean,
-    last?: boolean,
-    number?: number,
-    totalElements?: number,
-    totalPages?: number,
+    first: boolean,
+    last: boolean,
+    number: number,
+    totalElements: number,
+    totalPages: number,
 }
 
 export interface getProductRequest {
@@ -25,4 +31,8 @@ export interface getProductRequest {
     size?: number | null,
 }
 
+export type getProductsFeaturedResponse = product[];
+
 export type getProductsBrandResponse = product[];
+
+export type getProductsCategoryResponse = category[];
